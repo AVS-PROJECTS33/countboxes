@@ -4,39 +4,36 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>AI Object Counter</title>
+  <title>Box Guesser Counter</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <div id="app">
     <header class="header">
-      <h1>Contador IA</h1>
-      <div id="status" class="status loading">Cargando Modelo IA...</div>
+      <h1>Box Guesser</h1>
+      <div id="status" class="status ready">Listo para iniciar</div>
     </header>
 
     <main class="main-content">
       <div class="video-container">
-        <!-- El video ahora se mostrará visualmente para mejor compatibilidad -->
+        <!-- El video es visible por debajo para que iOS no lo congele -->
         <video id="videoInput" autoplay playsinline muted></video>
-        <!-- Canvas superpuesto para dibujar los recuadros -->
+        <!-- Canvas superpuesto donde pintamos el escaneo -->
         <canvas id="canvasOutput"></canvas>
       </div>
       
       <div class="counter-display">
-        <span class="counter-label">Objetos Detectados</span>
+        <span class="counter-label">Cajas Estimadas</span>
         <div id="boxCount">0</div>
       </div>
       
       <div class="controls">
-        <button id="startBtn" disabled>Iniciar Cámara</button>
+        <button id="startBtn">Iniciar Cámara</button>
+        <button id="calibrateBtn" disabled>Calibrar 1 Caja</button>
       </div>
     </main>
   </div>
 
-  <!-- TensorFlow.js core y modelo COCO-SSD -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-  
   <script type="module" src="./main.js"></script>
 </body>
 </html>
