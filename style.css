@@ -3,7 +3,7 @@
 :root {
   --bg-color: #0f172a;
   --surface-color: #1e293b;
-  --accent-color: #facc15;
+  --accent-color: #3b82f6; /* Cambiamos a azul para IA */
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --success-color: #10b981;
@@ -85,24 +85,27 @@ body {
   overflow: hidden;
 }
 
+/* En iOS, si ocultas el video, la cámara puede detenerse. 
+   Mejor lo mostramos y ponemos el canvas transparente encima. */
 #videoInput {
-  /* No usar display: none porque iOS Safari detiene el video si no es visible */
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.01; /* Casi invisible pero Safari sigue procesándolo */
-  z-index: -1;
-}
-
-#canvasOutput {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
+}
+
+#canvasOutput {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  pointer-events: none; /* Para que los toques pasen al video si hiciera falta */
 }
 
 .counter-display {
@@ -115,8 +118,9 @@ body {
   padding: 15px 40px;
   border-radius: 30px;
   text-align: center;
-  border: 1px solid rgba(250, 204, 21, 0.3);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(250, 204, 21, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.2);
+  z-index: 3;
 }
 
 .counter-label {
@@ -133,7 +137,7 @@ body {
   font-weight: 900;
   color: var(--accent-color);
   line-height: 1;
-  text-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
 .controls {
@@ -158,7 +162,7 @@ button {
 
 #startBtn {
   background: var(--accent-color);
-  color: #000;
+  color: #fff;
 }
 
 #startBtn:active {
@@ -169,19 +173,4 @@ button {
   background: #334155;
   color: #64748b;
   cursor: not-allowed;
-}
-
-#calibrateBtn {
-  background: #334155;
-  color: var(--text-primary);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-#calibrateBtn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-#calibrateBtn:active {
-  transform: scale(0.96);
 }

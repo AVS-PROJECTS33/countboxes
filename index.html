@@ -4,38 +4,39 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Yellow Box Counter</title>
+  <title>AI Object Counter</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <div id="app">
     <header class="header">
-      <h1>Contador de Cajas</h1>
-      <div id="status" class="status loading">Cargando OpenCV...</div>
+      <h1>Contador IA</h1>
+      <div id="status" class="status loading">Cargando Modelo IA...</div>
     </header>
 
     <main class="main-content">
       <div class="video-container">
-        <!-- Hidden video element to capture camera stream -->
+        <!-- El video ahora se mostrará visualmente para mejor compatibilidad -->
         <video id="videoInput" autoplay playsinline muted></video>
-        <!-- Canvas to display processed output -->
+        <!-- Canvas superpuesto para dibujar los recuadros -->
         <canvas id="canvasOutput"></canvas>
       </div>
       
       <div class="counter-display">
-        <span class="counter-label">Cajas Estimadas</span>
+        <span class="counter-label">Objetos Detectados</span>
         <div id="boxCount">0</div>
       </div>
       
       <div class="controls">
         <button id="startBtn" disabled>Iniciar Cámara</button>
-        <button id="calibrateBtn" disabled>Calibrar 1 Caja</button>
       </div>
     </main>
   </div>
 
-  <!-- Load OpenCV.js asynchronously -->
-  <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  <!-- TensorFlow.js core y modelo COCO-SSD -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  
   <script type="module" src="./main.js"></script>
 </body>
 </html>
