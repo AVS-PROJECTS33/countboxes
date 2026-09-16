@@ -111,6 +111,22 @@ function processVideo() {
     if (!streaming) return;
 
     try {
+        // iOS suele cambiar la resolución de la cámara después de arrancar.
+        // Si las dimensiones cambian, necesitamos recrear las matrices de OpenCV.
+        if (video.videoWidth !== src.cols || video.videoHeight !== src.rows) {
+            video.width = video.videoWidth;
+            video.height = video.videoHeight;
+            canvasOutput.width = video.videoWidth;
+            canvasOutput.height = video.videoHeight;
+            
+            src.delete(); dst.delete(); hsv.delete(); mask.delete();
+            
+            src = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC4);
+            dst = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC4);
+            hsv = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC3);
+            mask = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC1);
+        }
+
         cap.read(src);
         
         // Si la imagen está vacía, saltar al siguiente frame
