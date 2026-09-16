@@ -39,16 +39,29 @@ calibrateBtn.addEventListener('click', () => {
 
 function startCamera() {
     // Usar cámara trasera si está disponible
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Tu navegador no soporta el acceso a la cámara (getUserMedia no está disponible).");
+        return;
+    }
+
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
         .then(function(stream) {
             video.srcObject = stream;
-            video.play();
+            
+            // Promise para video.play() que a veces falla en iOS
+            let playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    alert("Error al intentar reproducir el video: " + error.message);
+                });
+            }
+
             startBtn.textContent = 'Detener Cámara';
             calibrateBtn.disabled = false;
             streaming = true;
             
-            // Esperar a que el video tenga dimensiones
-            video.oncanplay = () => {
+            // onloadedmetadata es más confiable en iOS que oncanplay para streams
+            video.onloadedmetadata = () => {
                 // Ajustar el canvas al tamaño del video
                 canvasOutput.width = video.videoWidth;
                 canvasOutput.height = video.videoHeight;
@@ -66,6 +79,7 @@ function startCamera() {
             };
         })
         .catch(function(err) {
+            alert("Error al acceder a la cámara: " + err.name + " - " + err.message);
             console.error("Error al acceder a la cámara: ", err);
             statusLabel.textContent = 'Error de cámara';
             statusLabel.className = 'status loading';
