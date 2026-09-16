@@ -33,10 +33,17 @@ startBtn.addEventListener('click', () => {
 
 calibrateBtn.addEventListener('click', () => {
     if (currentYellowPixels > 100) {
-        singleBoxPixels = currentYellowPixels;
-        alert("¡Calibrado! Área de 1 caja = " + singleBoxPixels + " píxeles.");
+        let input = prompt("¿Cuántas cajas amarillas hay ahora mismo en pantalla?", "3");
+        let numCajas = parseInt(input);
+        
+        if (!isNaN(numCajas) && numCajas > 0) {
+            singleBoxPixels = currentYellowPixels / numCajas;
+            alert("¡Calibrado! La app ahora sabe qué tamaño ocupan " + numCajas + " cajas a esta distancia.");
+        } else {
+            alert("Calibración cancelada. Debes introducir un número válido mayor que 0.");
+        }
     } else {
-        alert("Apunta bien a un bloque amarillo antes de calibrar (muy poco color detectado).");
+        alert("Apunta bien a los bloques amarillos antes de calibrar (muy poco color detectado).");
     }
 });
 
