@@ -111,8 +111,13 @@ function processVideo() {
     if (!streaming) return;
 
     try {
+        if (video.videoWidth === 0 || video.videoHeight === 0) {
+            requestAnimationFrame(processVideo);
+            return;
+        }
+
         // iOS suele cambiar la resolución de la cámara después de arrancar.
-        // Si las dimensiones cambian, necesitamos recrear las matrices de OpenCV.
+        // Si las dimensiones cambian, necesitamos recrear las matrices de OpenCV y el VideoCapture.
         if (video.videoWidth !== src.cols || video.videoHeight !== src.rows) {
             video.width = video.videoWidth;
             video.height = video.videoHeight;
@@ -125,6 +130,9 @@ function processVideo() {
             dst = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC4);
             hsv = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC3);
             mask = new cv.Mat(video.videoHeight, video.videoWidth, cv.CV_8UC1);
+            
+            // ¡CRÍTICO! OpenCV guarda el tamaño interno. Hay que recrear cap también.
+            cap = new cv.VideoCapture(video);
         }
 
         cap.read(src);
