@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Yellow Box Counter</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1>Contador de Cajas</h1>
+      <div id="status" class="status loading">Cargando OpenCV...</div>
+    </header>
 
+    <main class="main-content">
+      <div class="video-container">
+        <!-- Hidden video element to capture camera stream -->
+        <video id="videoInput" autoplay playsinline></video>
+        <!-- Canvas to display processed output -->
+        <canvas id="canvasOutput"></canvas>
+      </div>
+      
+      <div class="counter-display">
+        <span class="counter-label">Cajas Estimadas</span>
+        <div id="boxCount">0</div>
+      </div>
+      
+      <div class="controls">
+        <button id="startBtn" disabled>Iniciar Cámara</button>
+        <button id="calibrateBtn" disabled>Calibrar 1 Caja</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Load OpenCV.js asynchronously -->
+  <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
