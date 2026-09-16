@@ -3,11 +3,15 @@ const canvas = document.getElementById('canvasOutput');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
 const startBtn = document.getElementById('startBtn');
 const calibrateBtn = document.getElementById('calibrateBtn');
+const resetBtn = document.getElementById('resetBtn');
 const statusLabel = document.getElementById('status');
 const boxCountLabel = document.getElementById('boxCount');
 
 let streaming = false;
 let animationId = null;
+
+// Memoria del máximo de cajas detectadas
+let maxBoxesDetected = 0;
 
 // Tamaño base de una caja en píxeles (valor por defecto)
 let singleBoxPixels = 1500; 
@@ -34,6 +38,11 @@ calibrateBtn.addEventListener('click', () => {
     } else {
         alert("Apunta bien a un bloque amarillo antes de calibrar (muy poco color detectado).");
     }
+});
+
+resetBtn.addEventListener('click', () => {
+    maxBoxesDetected = 0;
+    boxCountLabel.textContent = "0";
 });
 
 async function startCamera() {
@@ -63,6 +72,7 @@ async function startCamera() {
 
         startBtn.textContent = 'Detener Cámara';
         calibrateBtn.disabled = false;
+        resetBtn.disabled = false;
         streaming = true;
         statusLabel.textContent = 'Cámara Activa';
         statusLabel.className = 'status ready';
@@ -100,6 +110,7 @@ function stopCamera() {
     streaming = false;
     startBtn.textContent = 'Iniciar Cámara';
     calibrateBtn.disabled = true;
+    resetBtn.disabled = true;
     if (animationId) {
         cancelAnimationFrame(animationId);
     }
@@ -196,12 +207,17 @@ function scanPixels() {
     // 5. Calcular cajas
     if (yellowPixelCount > 0) {
         let count = Math.round(yellowPixelCount / singleBoxPixels);
-        // Si hay una mancha pero no llega a 1 caja entera, mostramos 1
+        // Si hay una mancha pero no llega a 1 caja entera, contamos 1
         if (count === 0 && yellowPixelCount > (singleBoxPixels * 0.3)) count = 1;
-        boxCountLabel.textContent = count;
-    } else {
-        boxCountLabel.textContent = "0";
+        
+        // Actualizamos el máximo histórico
+        if (count > maxBoxesDetected) {
+            maxBoxesDetected = count;
+        }
     }
+
+    // Mostrar siempre el máximo detectado
+    boxCountLabel.textContent = maxBoxesDetected;
 
     animationId = requestAnimationFrame(scanPixels);
 }

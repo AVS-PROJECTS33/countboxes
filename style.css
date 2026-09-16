@@ -187,3 +187,18 @@ button {
 #calibrateBtn:active {
   transform: scale(0.96);
 }
+
+#resetBtn {
+  background: #ef4444; /* Rojo para reset */
+  color: #fff;
+}
+
+#resetBtn:active {
+  transform: scale(0.96);
+}
+
+#resetBtn:disabled {
+  background: #334155;
+  color: #64748b;
+  cursor: not-allowed;
+}
